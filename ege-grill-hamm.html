@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ege Grill — Vom Feuer, mit Herz. Hamm</title>
+<meta name="color-scheme" content="dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #17140f;
+    --bg-panel: #201a13;
+    --bg-panel-2: #241d15;
+    --ink: #f3ecdf;
+    --ink-muted: #b6a892;
+    --ink-faint: #7d715f;
+    --flame: #e8871e;
+    --flame-deep: #b9560f;
+    --aegean: #3c8a97;
+    --aegean-deep: #235058;
+    --line: rgba(243,236,223,0.14);
+    --line-soft: rgba(243,236,223,0.08);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: calc(76px + env(safe-area-inset-top, 0px));
+  }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Work Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    -webkit-font-smoothing: antialiased;
+  }
+  img, svg { max-width: 100%; display: block; }
+  a { color: inherit; }
+  .wrap {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+  h1, h2, h3 {
+    font-family: "Fraunces", Georgia, serif;
+    font-weight: 500;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+  ::selection { background: var(--flame); color: #1a1208; }
+  :focus-visible { outline: 2px solid var(--flame); outline-offset: 3px; }
+
+  /* ---------- Nav ---------- */
+  header.site {
+    position: fixed;
+    top: env(safe-area-inset-top, 0px);
+    left: 0; right: 0;
+    z-index: 50;
+    background: transparent;
+    border-bottom: 1px solid transparent;
+    transition: background .35s ease, border-color .35s ease;
+  }
+  header.site.scrolled {
+    background: rgba(23,20,15,0.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.1rem 1.5rem;
+    max-width: 1040px;
+    margin: 0 auto;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: .55rem;
+    font-family: "Fraunces", serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--ink);
+  }
+  .brand svg { width: 26px; height: 26px; flex-shrink: 0; }
+  nav.links {
+    display: flex;
+    gap: 2.1rem;
+    font-size: .95rem;
+  }
+  nav.links a {
+    text-decoration: none;
+    color: var(--ink-muted);
+    transition: color .2s ease;
+    position: relative;
+  }
+  nav.links a:hover { color: var(--ink); }
+  .nav-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    background: var(--flame);
+    color: #1a1208;
+    padding: .55rem 1.1rem;
+    border-radius: 3px;
+    font-size: .9rem;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .menu-toggle {
+    display: none;
+    background: none; border: none;
+    color: var(--ink);
+    width: 40px; height: 40px;
+    cursor: pointer;
+  }
+  .mobile-panel {
+    display: none;
+    flex-direction: column;
+    gap: 1.1rem;
+    padding: 1.2rem 1.5rem 1.6rem;
+    background: rgba(23,20,15,0.98);
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .mobile-panel a {
+    text-decoration: none;
+    color: var(--ink-muted);
+    font-size: 1.05rem;
+  }
+  .mobile-panel.open { display: flex; }
+
+  @media (max-width: 720px) {
+    nav.links, .nav-cta.desktop-only { display: none; }
+    .menu-toggle { display: block; }
+  }
+
+  /* ---------- Grate divider ---------- */
+  .grate {
+    height: 14px;
+    width: 100%;
+    background-image: repeating-linear-gradient(90deg, var(--line) 0 2px, transparent 2px 26px);
+    opacity: .55;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative;
+    padding: calc(9rem + env(safe-area-inset-top, 0px)) 0 5rem;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: "";
+    position: absolute;
+    top: -20%; right: -12%;
+    width: 620px; height: 620px;
+    background: radial-gradient(circle, rgba(232,135,30,0.16) 0%, rgba(232,135,30,0) 70%);
+    pointer-events: none;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 3rem;
+    align-items: center;
+    position: relative;
+  }
+  .eyebrow-line {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    color: var(--aegean);
+    font-size: .85rem;
+    margin-bottom: 1.1rem;
+    letter-spacing: .02em;
+  }
+  .eyebrow-line svg { width: 16px; height: 16px; }
+  h1.headline {
+    font-size: clamp(2.5rem, 6vw, 4.1rem);
+    line-height: 1.04;
+    color: var(--ink);
+    opacity: 0;
+    animation: rise .8s ease .1s forwards;
+  }
+  h1.headline em {
+    font-style: italic;
+    color: var(--flame);
+  }
+  .hero p.lede {
+    margin: 1.4rem 0 2.1rem;
+    color: var(--ink-muted);
+    font-size: 1.1rem;
+    max-width: 34ch;
+    opacity: 0;
+    animation: rise .8s ease .25s forwards;
+  }
+  .hero .cta-row {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: rise .8s ease .4s forwards;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .55rem;
+    padding: .85rem 1.5rem;
+    border-radius: 3px;
+    text-decoration: none;
+    font-size: .95rem;
+    font-weight: 600;
+    border: 1px solid transparent;
+    cursor: pointer;
+  }
+  .btn.primary { background: var(--flame); color: #1a1208; }
+  .btn.primary:hover { background: #f2953a; }
+  .btn.ghost {
+    background: transparent;
+    color: var(--ink);
+    border-color: var(--line);
+  }
+  .btn.ghost:hover { border-color: var(--ink-muted); }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    h1.headline, .hero p.lede, .hero .cta-row { animation: none !important; opacity: 1 !important; }
+  }
+
+  .skewer-art {
+    position: relative;
+    aspect-ratio: 4/5;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    background: linear-gradient(165deg, var(--bg-panel) 0%, var(--bg-panel-2) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+  @media (max-width: 860px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .skewer-art { max-width: 320px; margin: 0 auto; }
+  }
+
+  /* ---------- Section shell ---------- */
+  section { padding: 5rem 0; }
+  section.alt { background: var(--bg-panel); }
+  .section-head {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: .5rem;
+    margin-bottom: 2.6rem;
+    max-width: 46ch;
+  }
+  .section-kicker {
+    color: var(--aegean);
+    font-size: .85rem;
+    font-weight: 500;
+  }
+  .section-head h2 { font-size: clamp(1.8rem, 3.4vw, 2.4rem); }
+  .section-head p { color: var(--ink-muted); margin: .3rem 0 0; }
+
+  /* ---------- About ---------- */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 3.5rem;
+    align-items: start;
+  }
+  .about-grid p { color: var(--ink-muted); margin: 0 0 1.1rem; }
+  .about-grid p:last-child { margin-bottom: 0; }
+  .stat-row {
+    display: flex;
+    gap: 2.2rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+  }
+  .stat b {
+    display: block;
+    font-family: "Fraunces", serif;
+    font-size: 1.9rem;
+    color: var(--flame);
+    font-weight: 500;
+  }
+  .stat span { color: var(--ink-faint); font-size: .85rem; }
+  @media (max-width: 780px) { .about-grid { grid-template-columns: 1fr; } }
+
+  /* ---------- Signature dishes ---------- */
+  .dish-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .dish {
+    background: var(--bg);
+    padding: 2rem 1.6rem;
+  }
+  .dish .mark { color: var(--flame); margin-bottom: 1rem; }
+  .dish .mark svg { width: 30px; height: 30px; }
+  .dish h3 { font-size: 1.15rem; margin-bottom: .5rem; }
+  .dish p { color: var(--ink-muted); font-size: .92rem; margin: 0 0 1rem; }
+  .dish .price { color: var(--ink-faint); font-size: .85rem; border-top: 1px solid var(--line-soft); padding-top: .8rem; }
+  @media (max-width: 860px) { .dish-row { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 540px) { .dish-row { grid-template-columns: 1fr; } }
+
+  /* ---------- Menu ledger ---------- */
+  .menu-groups {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem 4rem;
+  }
+  @media (max-width: 780px) { .menu-groups { grid-template-columns: 1fr; gap: 2.4rem; } }
+  .menu-group h3 {
+    font-size: 1.05rem;
+    color: var(--aegean);
+    font-weight: 500;
+    margin-bottom: 1.1rem;
+    padding-bottom: .7rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .menu-item {
+    display: flex;
+    align-items: baseline;
+    gap: .5rem;
+    padding: .55rem 0;
+  }
+  .menu-item .name { font-size: .98rem; }
+  .menu-item .leader {
+    flex: 1;
+    border-bottom: 1px dotted var(--ink-faint);
+    height: .5em;
+    opacity: .5;
+  }
+  .menu-item .price {
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-muted);
+    font-size: .92rem;
+  }
+  .menu-note {
+    margin-top: 2.4rem;
+    color: var(--ink-faint);
+    font-size: .82rem;
+  }
+
+  /* ---------- Contact ---------- */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+  }
+  @media (max-width: 780px) { .contact-grid { grid-template-columns: 1fr; } }
+  .info-block { margin-bottom: 1.8rem; }
+  .info-block h3 {
+    font-size: .8rem;
+    text-transform: none;
+    color: var(--aegean);
+    font-weight: 500;
+    margin-bottom: .5rem;
+  }
+  .info-block p { margin: 0; color: var(--ink); }
+  .info-block .muted { color: var(--ink-faint); font-size: .82rem; margin-top: .3rem; }
+  .hours-table { width: 100%; border-collapse: collapse; }
+  .hours-table td { padding: .5rem 0; border-bottom: 1px solid var(--line-soft); font-size: .95rem; }
+  .hours-table td:last-child { text-align: right; color: var(--ink-muted); }
+
+  .contact-card {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 2rem;
+  }
+
+  footer {
+    padding: 2.6rem 0 calc(2.6rem + env(safe-area-inset-bottom, 0px));
+    border-top: 1px solid var(--line-soft);
+  }
+  .footer-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    color: var(--ink-faint);
+    font-size: .85rem;
+  }
+</style>
+</head>
+<body>
+
+<header class="site" id="siteHeader">
+  <div class="nav-inner">
+    <a href="#top" class="brand">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 2c-1 3-4 4.5-4 8a4 4 0 0 0 8 0c0-1.3-.6-2.2-1.2-3.1-.3.9-.9 1.4-1.5 1.1.6-1.6-.2-3-1.3-6z" fill="#e8871e"/></svg>
+      Ege Grill
+    </a>
+    <nav class="links">
+      <a href="#ueber-uns">Über uns</a>
+      <a href="#speisekarte">Speisekarte</a>
+      <a href="#kontakt">Kontakt</a>
+    </nav>
+    <a href="tel:+492381987654" class="nav-cta desktop-only">Jetzt anrufen</a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Menü öffnen" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+  <div class="mobile-panel" id="mobilePanel">
+    <a href="#ueber-uns">Über uns</a>
+    <a href="#speisekarte">Speisekarte</a>
+    <a href="#kontakt">Kontakt</a>
+    <a href="tel:+492381987654" class="nav-cta" style="width:fit-content">Jetzt anrufen</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <div class="eyebrow-line">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+          Hamm, seit Generationen am Grill
+        </div>
+        <h1 class="headline">Vom Feuer,<br><em>mit Herz.</em></h1>
+        <p class="lede">Ege Grill bringt die Aromen der Ägäis auf den Holzkohlegrill — Döner, Spieße und Fladenbrot, täglich frisch für Hamm zubereitet.</p>
+        <div class="cta-row">
+          <a href="#speisekarte" class="btn primary">Speisekarte ansehen</a>
+          <a href="tel:+492381987654" class="btn ghost">Jetzt anrufen</a>
+        </div>
+      </div>
+      <div class="skewer-art">
+        <svg viewBox="0 0 220 260" fill="none">
+          <line x1="40" y1="20" x2="40" y2="240" stroke="#7d715f" stroke-width="2"/>
+          <line x1="100" y1="30" x2="100" y2="230" stroke="#7d715f" stroke-width="2"/>
+          <line x1="160" y1="20" x2="160" y2="240" stroke="#7d715f" stroke-width="2"/>
+          <g>
+            <rect x="26" y="55" width="28" height="26" rx="3" fill="#b9560f"/>
+            <rect x="26" y="95" width="28" height="26" rx="3" fill="#e8871e"/>
+            <rect x="26" y="135" width="28" height="26" rx="3" fill="#b9560f"/>
+            <rect x="86" y="65" width="28" height="26" rx="3" fill="#e8871e"/>
+            <rect x="86" y="105" width="28" height="26" rx="3" fill="#b9560f"/>
+            <rect x="86" y="145" width="28" height="26" rx="3" fill="#e8871e"/>
+            <rect x="146" y="55" width="28" height="26" rx="3" fill="#b9560f"/>
+            <rect x="146" y="95" width="28" height="26" rx="3" fill="#e8871e"/>
+            <rect x="146" y="135" width="28" height="26" rx="3" fill="#b9560f"/>
+          </g>
+          <path d="M15 250c15-6 30-6 50 0s35 6 50 0 35-6 50 0 35 6 50 0" stroke="#3c8a97" stroke-width="2" fill="none" opacity=".6"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <div class="grate"></div>
+
+  <section id="ueber-uns">
+    <div class="wrap about-grid">
+      <div>
+        <div class="section-kicker">Über uns</div>
+        <h2>Zwischen Anatolien<br>und Hamm.</h2>
+      </div>
+      <div>
+        <p>Ege Grill ist nach der Ägäisküste benannt, in der unsere Familienrezepte ihren Ursprung haben. Was als kleiner Grill mit drei Tischen begann, ist heute ein fester Anlaufpunkt für alle, die frisches Fladenbrot und ehrliches Grillfleisch in Hamm suchen.</p>
+        <p>Wir marinieren unser Fleisch selbst, backen das Fladenbrot täglich frisch und grillen ausschließlich über Holzkohle — so, wie es unsere Großeltern in Izmir getan haben.</p>
+        <div class="stat-row">
+          <div class="stat"><b>100%</b><span>Holzkohlegrill</span></div>
+          <div class="stat"><b>Täglich</b><span>frisches Fladenbrot</span></div>
+          <div class="stat"><b>Familie</b><span>seit drei Generationen</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="alt">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-kicker">Unsere Favoriten</div>
+        <h2>Was am häufigsten bestellt wird</h2>
+      </div>
+    </div>
+    <div class="wrap">
+      <div class="dish-row">
+        <div class="dish">
+          <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/></svg></div>
+          <h3>Ege Döner</h3>
+          <p>Kalbfleisch vom Drehspieß, hausgemachte Soßen, frisches Fladenbrot.</p>
+          <div class="price">6,50 €</div>
+        </div>
+        <div class="dish">
+          <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 20l8-16 8 16"/></svg></div>
+          <h3>Adana Spieß</h3>
+          <p>Würziges Lammhack vom Holzkohlegrill, mit Bulgur und gegrillter Paprika.</p>
+          <div class="price">11,90 €</div>
+        </div>
+        <div class="dish">
+          <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="4" y="4" width="16" height="16" rx="2"/></svg></div>
+          <h3>Lahmacun</h3>
+          <p>Dünn gebacken mit würzigem Hack, Petersilie und einem Spritzer Zitrone.</p>
+          <div class="price">4,50 €</div>
+        </div>
+        <div class="dish">
+          <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M5 12h14M5 12a7 7 0 0114 0M5 12a7 7 0 0014 0"/></svg></div>
+          <h3>Gemischter Grillteller</h3>
+          <p>Drei Spieße vom Grill, Beilagen und ein kleiner Salat.</p>
+          <div class="price">15,90 €</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="speisekarte">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-kicker">Speisekarte</div>
+        <h2>Die ganze Karte</h2>
+        <p>Eine Auswahl unserer Klassiker — die vollständige Karte hängt bei uns im Laden aus.</p>
+      </div>
+      <div class="menu-groups">
+        <div class="menu-group">
+          <h3>Vom Grill</h3>
+          <div class="menu-item"><span class="name">Adana Spieß</span><span class="leader"></span><span class="price">11,90 €</span></div>
+          <div class="menu-item"><span class="name">Hähnchenspieß</span><span class="leader"></span><span class="price">10,50 €</span></div>
+          <div class="menu-item"><span class="name">Lammkotelett (2 Stück)</span><span class="leader"></span><span class="price">13,90 €</span></div>
+          <div class="menu-item"><span class="name">Gemischter Grillteller</span><span class="leader"></span><span class="price">15,90 €</span></div>
+        </div>
+        <div class="menu-group">
+          <h3>Döner &amp; Dürüm</h3>
+          <div class="menu-item"><span class="name">Ege Döner</span><span class="leader"></span><span class="price">6,50 €</span></div>
+          <div class="menu-item"><span class="name">Dürüm Döner</span><span class="leader"></span><span class="price">7,00 €</span></div>
+          <div class="menu-item"><span class="name">Döner Teller</span><span class="leader"></span><span class="price">9,50 €</span></div>
+        </div>
+        <div class="menu-group">
+          <h3>Vom Ofen</h3>
+          <div class="menu-item"><span class="name">Lahmacun</span><span class="leader"></span><span class="price">4,50 €</span></div>
+          <div class="menu-item"><span class="name">Pide mit Hackfleisch</span><span class="leader"></span><span class="price">8,50 €</span></div>
+          <div class="menu-item"><span class="name">Pizza Margherita (Ø28cm)</span><span class="leader"></span><span class="price">6,00 €</span></div>
+        </div>
+        <div class="menu-group">
+          <h3>Salate &amp; Getränke</h3>
+          <div class="menu-item"><span class="name">Gemischter Salat</span><span class="leader"></span><span class="price">5,00 €</span></div>
+          <div class="menu-item"><span class="name">Hirtensalat</span><span class="leader"></span><span class="price">6,50 €</span></div>
+          <div class="menu-item"><span class="name">Ayran 0,33l</span><span class="leader"></span><span class="price">2,00 €</span></div>
+          <div class="menu-item"><span class="name">Türkischer Tee</span><span class="leader"></span><span class="price">1,50 €</span></div>
+        </div>
+      </div>
+      <p class="menu-note">Beispielgerichte und -preise für diese Vorschau — bitte durch die echte Karte ersetzen.</p>
+    </div>
+  </section>
+
+  <div class="grate"></div>
+
+  <section id="kontakt" class="alt">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-kicker">Kontakt</div>
+        <h2>Vorbeikommen oder anrufen</h2>
+      </div>
+      <div class="contact-grid">
+        <div>
+          <div class="info-block">
+            <h3>Adresse</h3>
+            <p>Weststraße 24<br>59065 Hamm</p>
+            <div class="muted">Beispieladresse — bitte durch die echte ersetzen</div>
+          </div>
+          <div class="info-block">
+            <h3>Telefon</h3>
+            <p><a href="tel:+492381987654" style="text-decoration:none;">02381 / 98 76 54</a></p>
+            <div class="muted">Beispielnummer — bitte durch die echte ersetzen</div>
+          </div>
+          <div class="info-block">
+            <h3>E-Mail</h3>
+            <p><a href="mailto:info@egegrill-hamm.de" style="text-decoration:none;">info@egegrill-hamm.de</a></p>
+          </div>
+        </div>
+        <div class="contact-card">
+          <h3 style="font-size:.85rem;color:var(--aegean);font-weight:500;margin-bottom:1rem;">Öffnungszeiten</h3>
+          <table class="hours-table">
+            <tr><td>Montag – Samstag</td><td>11:00 – 22:00</td></tr>
+            <tr><td>Sonntag</td><td>12:00 – 21:00</td></tr>
+          </table>
+          <a href="tel:+492381987654" class="btn primary" style="margin-top:1.6rem;width:100%;justify-content:center;">Tisch reservieren</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap footer-row">
+    <span>© 2026 Ege Grill, Hamm</span>
+    <span>Vorschau-Website · Inhalte &amp; Kontaktdaten sind Platzhalter</span>
+  </div>
+</footer>
+
+<script>
+  var header = document.getElementById('siteHeader');
+  window.addEventListener('scroll', function () {
+    header.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+
+  var toggle = document.getElementById('menuToggle');
+  var panel = document.getElementById('mobilePanel');
+  toggle.addEventListener('click', function () {
+    var open = panel.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  panel.querySelectorAll('a').forEach(function (a) {
+    a.addEventListener('click', function () {
+      panel.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
+    });
+  });
+</script>
+
+</body>
+</html>
